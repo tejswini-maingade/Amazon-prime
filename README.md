@@ -148,7 +148,7 @@ pipeline {
         stage('7. Create ECR repo') {
             steps {
                 withCredentials([string(credentialsId: 'access-key', variable: 'AWS_ACCESS_KEY'), 
-				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRETE_ACCESS_KEY')]) {
+				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRET_KEY')]) {
                     sh """
                     aws configure set aws_access_key_id $AWS_ACCESS_KEY
                     aws configure set aws_secret_access_key $AWS_SECRET_KEY
@@ -162,7 +162,7 @@ pipeline {
         stage('8. Login to ECR & tag image') {
             steps {
                 withCredentials([string(credentialsId: 'access-key', variable: 'AWS_ACCESS_KEY'), 
-				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRETE_ACCESS_KEY')]) {
+				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRET_KEY')]) {
                     sh """
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${params.AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com
                     docker tag ${params.ECR_REPO_NAME} ${params.AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${params.ECR_REPO_NAME}:${BUILD_NUMBER}
@@ -175,7 +175,7 @@ pipeline {
         stage('9. Push image to ECR') {
             steps {
                withCredentials([string(credentialsId: 'access-key', variable: 'AWS_ACCESS_KEY'), 
-				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRETE_ACCESS_KEY')]) {
+				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRET_KEY')]) {
                     sh """
                     docker push ${params.AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${params.ECR_REPO_NAME}:${BUILD_NUMBER}
                     docker push ${params.AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
@@ -220,7 +220,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'access-key', variable: 'AWS_ACCESS_KEY'), 
-				     string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRETE_ACCESS_KEY')]) {
+				     string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRET_KEY')]) {
                         sh "aws eks --region us-east-1 update-kubeconfig --name ${params.CLUSTER_NAME}"
                     }
                 }
@@ -289,7 +289,7 @@ pipeline {
             steps {
                 script {
                      withCredentials([string(credentialsId: 'access-key', variable: 'AWS_ACCESS_KEY'), 
-				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRETE_ACCESS_KEY')]) {
+				string(credentialsId: 'secrete-access-key', variable: 'AWS_SECRET_KEY')]) {
                         sh "aws eks --region us-east-1 update-kubeconfig --name ${params.CLUSTER_NAME}"
                     }
                 }
